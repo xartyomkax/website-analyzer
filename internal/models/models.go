@@ -1,5 +1,31 @@
 package models
 
+// LinkType represents the category of a link
+type LinkType int
+
+const (
+	LinkTypeInternal LinkType = iota
+	LinkTypeExternal
+	LinkTypeInvalid
+)
+
+func (lt LinkType) String() string {
+	switch lt {
+	case LinkTypeInternal:
+		return "internal"
+	case LinkTypeExternal:
+		return "external"
+	default:
+		return "invalid"
+	}
+}
+
+// Link represents a hyperlink found in the document
+type Link struct {
+	URL  string   `json:"url"`
+	Type LinkType `json:"type"`
+}
+
 // AnalysisResult contains all analysis data for a webpage
 type AnalysisResult struct {
 	URL               string         `json:"url"`
