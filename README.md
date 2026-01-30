@@ -87,6 +87,7 @@ Configuration is managed through environment variables:
 | `MAX_WORKERS` | `10` | Number of concurrent workers for link checking |
 | `MAX_RESPONSE_SIZE` | `10485760` | Maximum response size (10MB) |
 | `MAX_URL_LENGTH` | `2048` | Maximum URL length |
+| `MAX_REDIRECTS` | `10` | Maximum number of HTTP redirects to follow |
 
 ### Example
 

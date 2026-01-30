@@ -18,13 +18,14 @@ type Config struct {
 }
 
 func LoadConfig() *Config {
+	// Default values are defined in docs/specs/REQUIREMENTS.md
 	return &Config{
 		Port:            getEnv("PORT", "8080"),
 		Env:             getEnv("ENV", "production"),
 		RequestTimeout:  getEnvDuration("REQUEST_TIMEOUT", 30*time.Second),
 		LinkTimeout:     getEnvDuration("LINK_CHECK_TIMEOUT", 5*time.Second),
 		MaxWorkers:      getEnvInt("MAX_WORKERS", 10),
-		MaxResponseSize: getEnvInt64("MAX_RESPONSE_SIZE", 10*1024*1024),
+		MaxResponseSize: getEnvInt64("MAX_RESPONSE_SIZE", 10*1024*1024), // 10MB
 		MaxURLLength:    getEnvInt("MAX_URL_LENGTH", 2048),
 		MaxRedirects:    getEnvInt("MAX_REDIRECTS", 10),
 	}

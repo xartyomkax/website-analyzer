@@ -109,6 +109,8 @@ Description: Connection timeout after 30 seconds.
 
 ### 4. Security Requirements
 
+> **Note**: This section serves as the **Single Source of Truth** for all application limits and configuration defaults.
+
 #### SSRF Prevention
 Block requests to:
 - Private IP ranges: `10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`

@@ -325,6 +325,8 @@ type ResultsData struct {
 ## Configuration
 
 ### Environment Variables
+All default values are defined in [REQUIREMENTS.md](./REQUIREMENTS.md).
+
 ```bash
 # Server
 PORT=8080
@@ -340,6 +342,7 @@ MAX_WORKERS=10
 # Limits
 MAX_RESPONSE_SIZE=10485760  # 10MB
 MAX_URL_LENGTH=2048
+MAX_REDIRECTS=10
 ```
 
 ### Configuration Loading

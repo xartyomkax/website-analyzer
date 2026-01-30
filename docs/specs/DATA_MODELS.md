@@ -121,24 +121,14 @@ package analyzer
 
 import "time"
 
-// AnalysisConfig holds configuration for the analyzer
-type AnalysisConfig struct {
-    RequestTimeout  time.Duration // Timeout for fetching main page
-    LinkTimeout     time.Duration // Timeout per link check
-    MaxWorkers      int           // Number of concurrent link checkers
-    MaxResponseSize int64         // Maximum response size in bytes
-    UserAgent       string        // HTTP User-Agent header
-}
-
-// DefaultConfig returns sensible defaults
-func DefaultConfig() *AnalysisConfig {
-    return &AnalysisConfig{
-        RequestTimeout:  30 * time.Second,
-        LinkTimeout:     5 * time.Second,
-        MaxWorkers:      10,
-        MaxResponseSize: 10 * 1024 * 1024, // 10MB
-        UserAgent:       "WebPageAnalyzer/1.0",
-    }
+// Config holds configuration for the analyzer
+type Config struct {
+	RequestTimeout  time.Duration // Timeout for fetching main page
+	LinkTimeout     time.Duration // Timeout per link check
+	MaxWorkers      int           // Number of concurrent link checkers
+	MaxResponseSize int64         // Maximum response size in bytes
+	MaxURLLength    int           // Maximum URL length allowed
+	MaxRedirects    int           // Maximum number of redirects to follow
 }
 ```
 
@@ -146,27 +136,24 @@ func DefaultConfig() *AnalysisConfig {
 Main analyzer interface.
 
 ```go
-// Analyzer performs webpage analysis
-type Analyzer interface {
-    Analyze(url string) (*models.AnalysisResult, error)
-}
-
-// DefaultAnalyzer is the standard implementation
-type DefaultAnalyzer struct {
-    config     *AnalysisConfig
-    httpClient *http.Client
+// Analyzer is the standard implementation
+type Analyzer struct {
+	config     *Config
+	httpClient *http.Client
 }
 
 // NewAnalyzer creates a new analyzer instance
-func NewAnalyzer(config *AnalysisConfig) *DefaultAnalyzer {
-    return &DefaultAnalyzer{
-        config:     config,
-        httpClient: createHTTPClient(config),
-    }
+func NewAnalyzer(config *Config) *Analyzer {
+	return &Analyzer{
+		config: config,
+		httpClient: &http.Client{
+			Timeout: config.RequestTimeout,
+		},
+	}
 }
 
 // Analyze performs the complete analysis
-func (a *DefaultAnalyzer) Analyze(url string) (*models.AnalysisResult, error) {
+func (a *Analyzer) Analyze(url string) (*models.AnalysisResult, error) {
     // Implementation
 }
 ```
@@ -179,7 +166,7 @@ Data structures for template rendering.
 ```go
 package handler
 
-import "webpage-analyzer/internal/models"
+import "website-analyzer/internal/models"
 
 // IndexData is passed to the index.html template
 type IndexData struct {
