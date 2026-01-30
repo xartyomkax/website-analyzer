@@ -191,11 +191,11 @@ Expected performance:
 
 ## Testing
 
-The project maintains 80%+ test coverage with:
-- Unit tests for all packages
-- Table-driven tests
+The project maintains high test coverage with:
+- Unit tests for all internal packages
+- Table-driven tests for logic validation
 - Mock HTTP servers using `httptest`
-- Integration tests
+- **E2E Tests** covering the full flow from request to template rendering
 
 ## Docker
 

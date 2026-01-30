@@ -15,7 +15,7 @@ Track build progress and learnings in separate, focused files to avoid token blo
         ├── 02_html_parser_learnings.md
         ├── 03_link_checker_learnings.md
         ├── 04_http_handlers_learnings.md
-        └── 05_deployment_learnings.md
+        └── 05_e2e_tests_learnings.md
 ```
 
 ## BUILD_PROGRESS.md (Keep Current)

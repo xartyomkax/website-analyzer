@@ -1,8 +1,8 @@
 # Build Progress
 
 ## Current Status
-- **Task**: 05_DEPLOYMENT
-- **Status**: IN_PROGRESS
+- **Task**: 05_E2E_TESTS
+- **Status**: COMPLETED
 - **Last Updated**: 2026-01-30
 
 ## Completed Tasks
@@ -12,9 +12,9 @@
 - [x] 04_CONCURRENT_CHECKER: Implement concurrent link checking with worker pool.
 - [x] 05_VALIDATOR: Implement URL validation and SSRF protection.
 - [x] 06_HANDLERS: Implement web handlers and template rendering.
+- [x] 07_E2E_TESTS: End-to-end tests for all features.
 
 ## Pending Tasks
-- [ ] 07_DEPLOYMENT: Dockerization and final deployment checks.
 - [ ] 08_POLISH: Final UI/UX improvements and documentation.
 
 ## Blockers

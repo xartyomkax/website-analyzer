@@ -690,4 +690,4 @@ curl -X POST http://localhost:8080/analyze -d "url=https://example.com"
 ```
 
 ## Next Steps
-- [Task 05: Deployment](05_DEPLOYMENT.md)
+- [Task 05: E2E Tests](05_E2E_TESTS.md)

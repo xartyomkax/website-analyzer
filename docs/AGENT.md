@@ -54,7 +54,7 @@ See [PROGRESS_TRACKING.md](guides/PROGRESS_TRACKING.md) for detailed guide.
 2. [HTML Parser](docs/tasks/02_HTML_PARSER.md) - Parse HTML version, title, headings, forms
 3. [Link Checker](docs/tasks/03_LINK_CHECKER.md) - Extract and verify links concurrently
 4. [HTTP Handlers](docs/tasks/04_HTTP_HANDLERS.md) - Web server, routing, templates
-5. [Deployment](docs/tasks/05_DEPLOYMENT.md) - Docker, CI/CD, production config
+5. [E2E Tests](docs/tasks/05_E2E_TESTS.md) - 
 
 ### 📚 Guides (Best Practices)
 - [GO_BEST_PRACTICES.md](docs/guides/GO_BEST_PRACTICES.md) - Go idioms for this project

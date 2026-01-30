@@ -1,51 +1,19 @@
-# Task 05: Deployment
+# Task 05: E2E Tests
 
 ## Objective
-Finalize Docker configuration, documentation, and prepare for production deployment.
+Finalize E2E tests for all features.
 
 ## Steps
 
-### 1. Verify Dockerfile
+### 1. Update tests
 
-Ensure your Dockerfile is optimized:
-
-```dockerfile
-# Multi-stage build
-FROM golang:1.21-alpine AS builder
-
-RUN apk add --no-cache git ca-certificates
-
-WORKDIR /app
-
-COPY go.mod go.sum ./
-RUN go mod download
-
-COPY . .
-
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -ldflags="-w -s" -o analyzer cmd/main.go
-
-# Runtime
-FROM alpine:latest
-
-RUN apk --no-cache add ca-certificates
-
-WORKDIR /root/
-
-COPY --from=builder /app/analyzer .
-COPY --from=builder /app/web ./web
-
-EXPOSE 8080
-
-CMD ["./analyzer"]
-```
+Create E2E tests for webpage analyzer.
 
 ### 2. Update README
 
-**File: `README.md`**
+Add E2E test instructions, usage examples, and screenshots.
 
-Add deployment instructions, usage examples, and screenshots.
-
-### 3. Create .dockerignore
+### 3. Update .dockerignore
 
 ```
 .git
@@ -126,33 +94,14 @@ docker run -p 8080:8080 webpage-analyzer
 docker-compose up -d
 ```
 
-### Cloud Platforms
-
-**Google Cloud Run**:
-```bash
-gcloud run deploy webpage-analyzer --source .
-```
-
-**AWS ECS/Fargate**:
-```bash
-# Push to ECR
-# Create ECS task definition
-# Deploy to Fargate
-```
-
-**Heroku**:
-```bash
-heroku container:push web
-heroku container:release web
-```
-
 ## Next Steps
 
 Project complete! 🎉
 
 Consider adding:
 - CI/CD pipeline (GitHub Actions)
-- Metrics/monitoring (Prometheus)
+- Metrics/monitoring/logging (Prometheus)
+- Database to store history of analyzed webpages
 - Rate limiting
 - Caching layer
 - API endpoints
