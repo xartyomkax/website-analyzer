@@ -5,8 +5,9 @@ import (
 	"net/url"
 	"strings"
 
+	"website-analyzer/internal/models"
+
 	"github.com/PuerkitoBio/goquery"
-	"github.com/xartyomkax/website-analyzer/internal/models"
 )
 
 // ExtractLinks finds all <a href> tags and returns their URLs

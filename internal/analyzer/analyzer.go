@@ -7,9 +7,10 @@ import (
 	"net/http"
 	"time"
 
+	"website-analyzer/internal/models"
+	"website-analyzer/internal/validator"
+
 	"github.com/PuerkitoBio/goquery"
-	"github.com/xartyomkax/website-analyzer/internal/models"
-	"github.com/xartyomkax/website-analyzer/internal/validator"
 )
 
 type Config struct {
@@ -18,6 +19,7 @@ type Config struct {
 	MaxWorkers      int
 	MaxResponseSize int64
 	MaxURLLength    int
+	MaxRedirects    int
 }
 
 type Analyzer struct {
@@ -57,15 +59,18 @@ func (a *Analyzer) Analyze(targetURL string) (*models.AnalysisResult, error) {
 	for _, link := range links {
 		if link.Type == models.LinkTypeInternal {
 			internal++
-		} else if link.Type == models.LinkTypeExternal {
+		}
+
+		if link.Type == models.LinkTypeExternal {
 			external++
 		}
 	}
 
 	// Check link accessibility
 	checkConfig := CheckLinksConfig{
-		Timeout:    a.config.LinkTimeout,
-		MaxWorkers: a.config.MaxWorkers,
+		Timeout:      a.config.LinkTimeout,
+		MaxWorkers:   a.config.MaxWorkers,
+		MaxRedirects: a.config.MaxRedirects,
 	}
 	inaccessible := CheckLinks(links, checkConfig)
 

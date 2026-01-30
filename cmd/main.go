@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/xartyomkax/website-analyzer/internal/analyzer"
-	"github.com/xartyomkax/website-analyzer/internal/config"
-	"github.com/xartyomkax/website-analyzer/internal/handler"
+	"website-analyzer/internal/analyzer"
+	"website-analyzer/internal/config"
+	"website-analyzer/internal/handler"
 )
 
 func main() {
@@ -25,6 +25,7 @@ func main() {
 		MaxWorkers:      cfg.MaxWorkers,
 		MaxResponseSize: cfg.MaxResponseSize,
 		MaxURLLength:    cfg.MaxURLLength,
+		MaxRedirects:    cfg.MaxRedirects,
 	}
 
 	// Create analyzer

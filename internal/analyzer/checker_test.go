@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/xartyomkax/website-analyzer/internal/models"
+	"website-analyzer/internal/models"
 )
 
 func TestCheckLinks(t *testing.T) {

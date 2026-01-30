@@ -295,11 +295,9 @@ var httpClient = &http.Client{
 ```
 
 **Key Settings**:
-- Total timeout: 30s (main page), 5s (links)
-- Connection timeout: 10s
-- Max redirects: 3
 - Custom User-Agent header
 - No cookie jar (stateless)
+- Resource Limits from REQUIREMENTS.md
 
 ## Template System
 

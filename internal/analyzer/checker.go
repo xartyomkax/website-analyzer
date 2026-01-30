@@ -7,13 +7,14 @@ import (
 	"sync"
 	"time"
 
-	"github.com/xartyomkax/website-analyzer/internal/models"
+	"website-analyzer/internal/models"
 )
 
 // CheckLinksConfig holds configuration for link checking
 type CheckLinksConfig struct {
-	Timeout    time.Duration
-	MaxWorkers int
+	Timeout      time.Duration
+	MaxWorkers   int
+	MaxRedirects int
 }
 
 // checkResult is used internally for worker communication
@@ -39,10 +40,10 @@ func CheckLinks(links []models.Link, config CheckLinksConfig) []models.LinkError
 	if workerCount <= 0 {
 		workerCount = 10
 	}
+	wg.Add(workerCount)
 
 	for w := 0; w < workerCount; w++ {
-		wg.Add(1)
-		go worker(jobs, results, config.Timeout, &wg)
+		go worker(jobs, results, config, &wg)
 	}
 
 	// Send jobs
@@ -73,14 +74,14 @@ func CheckLinks(links []models.Link, config CheckLinksConfig) []models.LinkError
 }
 
 // worker processes link checking jobs
-func worker(jobs <-chan models.Link, results chan<- checkResult, timeout time.Duration, wg *sync.WaitGroup) {
+func worker(jobs <-chan models.Link, results chan<- checkResult, config CheckLinksConfig, wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	client := &http.Client{
-		Timeout: timeout,
+		Timeout: config.Timeout,
 		CheckRedirect: func(req *http.Request, via []*http.Request) error {
-			if len(via) >= 10 {
-				return fmt.Errorf("too many redirects")
+			if len(via) >= config.MaxRedirects {
+				return fmt.Errorf("Too many redirects")
 			}
 			return nil
 		},

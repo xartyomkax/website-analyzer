@@ -5,8 +5,9 @@ import (
 	"strings"
 	"testing"
 
+	"website-analyzer/internal/models"
+
 	"github.com/PuerkitoBio/goquery"
-	"github.com/xartyomkax/website-analyzer/internal/models"
 )
 
 func TestExtractLinks(t *testing.T) {

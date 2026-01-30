@@ -1,4 +1,4 @@
-module github.com/xartyomkax/website-analyzer
+module website-analyzer
 
 go 1.24.10
 

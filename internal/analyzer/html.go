@@ -63,14 +63,7 @@ func ExtractTitle(doc *goquery.Document) string {
 
 // CountHeadings counts headings by level (h1-h6)
 func CountHeadings(doc *goquery.Document) map[string]int {
-	headings := map[string]int{
-		"h1": 0,
-		"h2": 0,
-		"h3": 0,
-		"h4": 0,
-		"h5": 0,
-		"h6": 0,
-	}
+	headings := map[string]int{}
 
 	// Count each heading level
 	for level := 1; level <= 6; level++ {

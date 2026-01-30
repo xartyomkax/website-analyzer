@@ -14,6 +14,7 @@ type Config struct {
 	MaxWorkers      int
 	MaxResponseSize int64
 	MaxURLLength    int
+	MaxRedirects    int
 }
 
 func LoadConfig() *Config {
@@ -25,6 +26,7 @@ func LoadConfig() *Config {
 		MaxWorkers:      getEnvInt("MAX_WORKERS", 10),
 		MaxResponseSize: getEnvInt64("MAX_RESPONSE_SIZE", 10*1024*1024),
 		MaxURLLength:    getEnvInt("MAX_URL_LENGTH", 2048),
+		MaxRedirects:    getEnvInt("MAX_REDIRECTS", 10),
 	}
 }
 

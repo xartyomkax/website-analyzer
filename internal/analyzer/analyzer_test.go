@@ -37,6 +37,7 @@ func TestAnalyzer_Analyze(t *testing.T) {
 		MaxWorkers:      5,
 		MaxResponseSize: 1024 * 1024,
 		MaxURLLength:    2048,
+		MaxRedirects:    10,
 	}
 
 	a := NewAnalyzer(config)

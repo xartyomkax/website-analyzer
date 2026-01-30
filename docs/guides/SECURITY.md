@@ -212,7 +212,7 @@ func rateLimitMiddleware(next http.Handler) http.Handler {
 - [ ] Response size limits
 - [ ] Connection timeout
 - [ ] TLS handshake timeout
-- [ ] Maximum redirects limit (10)
+- [ ] Maximum redirects limit
 
 ### Output Safety
 - [ ] Use html/template for rendering
@@ -256,7 +256,7 @@ func rateLimitMiddleware(next http.Handler) http.Handler {
 
 ### Scenario 6: Redirect Loop
 **Attack**: URL redirects infinitely  
-**Defense**: Max 10 redirects in HTTP client
+**Defense**: Limit redirects in HTTP client
 
 ## Logging Security
 

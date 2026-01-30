@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/xartyomkax/website-analyzer/internal/analyzer"
-	"github.com/xartyomkax/website-analyzer/internal/models"
+	"website-analyzer/internal/analyzer"
+	"website-analyzer/internal/models"
 )
 
 type Handler struct {
