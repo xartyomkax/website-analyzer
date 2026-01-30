@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Results - Web Page Analyzer</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Analysis Results</h1>
+        
+        <div class="result-section">
+            <h2>Page Information</h2>
+            <table>
+                <tr>
+                    <th>URL:</th>
+                    <td>{{.Result.URL}}</td>
+                </tr>
+                <tr>
+                    <th>HTML Version:</th>
+                    <td>{{.Result.HTMLVersion}}</td>
+                </tr>
+                <tr>
+                    <th>Title:</th>
+                    <td>{{.Result.Title}}</td>
+                </tr>
+                <tr>
+                    <th>Login Form:</th>
+                    <td>{{if .Result.HasLoginForm}}Yes{{else}}No{{end}}</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="result-section">
+            <h2>Headings</h2>
+            <table>
+                <tr><th>H1:</th><td>{{index .Result.Headings "h1"}}</td></tr>
+                <tr><th>H2:</th><td>{{index .Result.Headings "h2"}}</td></tr>
+                <tr><th>H3:</th><td>{{index .Result.Headings "h3"}}</td></tr>
+                <tr><th>H4:</th><td>{{index .Result.Headings "h4"}}</td></tr>
+                <tr><th>H5:</th><td>{{index .Result.Headings "h5"}}</td></tr>
+                <tr><th>H6:</th><td>{{index .Result.Headings "h6"}}</td></tr>
+            </table>
+        </div>
+
+        <div class="result-section">
+            <h2>Links</h2>
+            <table>
+                <tr>
+                    <th>Internal Links:</th>
+                    <td>{{.Result.InternalLinks}}</td>
+                </tr>
+                <tr>
+                    <th>External Links:</th>
+                    <td>{{.Result.ExternalLinks}}</td>
+                </tr>
+                <tr>
+                    <th>Inaccessible Links:</th>
+                    <td>{{len .Result.InaccessibleLinks}}</td>
+                </tr>
+            </table>
+        </div>
+
+        {{if .Result.InaccessibleLinks}}
+        <div class="result-section">
+            <h2>Inaccessible Links</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>URL</th>
+                        <th>Status</th>
+                        <th>Error</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{range .Result.InaccessibleLinks}}
+                    <tr>
+                        <td>{{.URL}}</td>
+                        <td>{{if .StatusCode}}{{.StatusCode}}{{else}}N/A{{end}}</td>
+                        <td>{{.Error}}</td>
+                    </tr>
+                    {{end}}
+                </tbody>
+            </table>
+        </div>
+        {{end}}
+
+        <div class="actions">
+            <a href="/" class="button">Analyze Another Page</a>
+        </div>
+    </div>
+</body>
+</html>

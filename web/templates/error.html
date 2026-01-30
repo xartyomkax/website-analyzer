@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error - Web Page Analyzer</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Error</h1>
+        <div class="error">
+            <p><strong>Status Code:</strong> {{.StatusCode}}</p>
+            <p><strong>Message:</strong> {{.Error}}</p>
+        </div>
+        <div class="actions">
+            <a href="/" class="button">Go Back</a>
+        </div>
+    </div>
+</body>
+</html>
