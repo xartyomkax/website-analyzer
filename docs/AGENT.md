@@ -19,13 +19,13 @@ make docker-run    # Run in container
 ## Progress Tracking
 
 ### Files
-- `BUILD_PROGRESS.md` - Current status (read every session, keep under 100 lines)
-- `BUILD_LOG.md` - Full debug history (append-only, read when debugging)
+- `docs/BUILD_PROGRESS.md` - Current status (read every session, keep under 100 lines)
+- `docs/BUILD_LOG.md` - Full debug history (append-only, read when debugging)
 - `docs/learnings/` - Task-specific learnings (create after each task)
 
 ### Workflow for AI Agents
 **Session Start**:
-1. Read `BUILD_PROGRESS.md` to understand current state
+1. Read [BUILD_PROGRESS.md](docs/BUILD_PROGRESS.md) to understand current state
 2. Read relevant task doc from `docs/tasks/`
 3. Check `docs/learnings/` for related insights
 
@@ -34,10 +34,11 @@ make docker-run    # Run in container
 - Reference specific docs as needed
 
 **Session End**:
-1. Update `BUILD_PROGRESS.md` (mark completed, move to next task)
-2. Append summary to `BUILD_LOG.md`
+1. Update `docs/BUILD_PROGRESS.md` (mark completed, move to next task)
+2. Append summary to `docs/BUILD_LOG.md`
 3. Create `docs/learnings/NN_task_name_learnings.md` if task complete
 4. Note any documentation updates needed
+5. Create commit according to [COMMITS.md](guides/COMMITS.md) documentation
 
 See [PROGRESS_TRACKING.md](guides/PROGRESS_TRACKING.md) for detailed guide.
 
