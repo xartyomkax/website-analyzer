@@ -65,7 +65,7 @@
         {{if .Result.InaccessibleLinks}}
         <div class="result-section">
             <h2>Inaccessible Links</h2>
-            <table>
+            <table class="inaccessible-links">
                 <thead>
                     <tr>
                         <th>URL</th>
@@ -76,7 +76,12 @@
                 <tbody>
                     {{range .Result.InaccessibleLinks}}
                     <tr>
-                        <td>{{.URL}}</td>
+                        <td>
+                            <div class="url-container">
+                                <span class="url-text" title="{{.URL}}">{{.URL}}</span>
+                                <button class="copy-btn" onclick="copyToClipboard('{{.URL}}', this)">Copy</button>
+                            </div>
+                        </td>
                         <td>{{if .StatusCode}}{{.StatusCode}}{{else}}N/A{{end}}</td>
                         <td>{{.Error}}</td>
                     </tr>
@@ -84,6 +89,23 @@
                 </tbody>
             </table>
         </div>
+        <script>
+            function copyToClipboard(text, btn) {
+                navigator.clipboard.writeText(text).then(() => {
+                    const originalText = btn.textContent;
+                    btn.textContent = 'Copied!';
+                    btn.style.color = '#27ae60';
+                    btn.style.borderColor = '#27ae60';
+                    setTimeout(() => {
+                        btn.textContent = originalText;
+                        btn.style.color = '';
+                        btn.style.borderColor = '';
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Failed to copy: ', err);
+                });
+            }
+        </script>
         {{end}}
 
         <div class="actions">
