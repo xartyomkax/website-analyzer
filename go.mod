@@ -1,3 +1,10 @@
-module github.com/yourusername/webpage-analyzer
+module github.com/xartyomkax/website-analyzer
 
 go 1.24.10
+
+require github.com/PuerkitoBio/goquery v1.11.0
+
+require (
+	github.com/andybalholm/cascadia v1.3.3 // indirect
+	golang.org/x/net v0.47.0 // indirect
+)
