@@ -5,9 +5,9 @@ import (
 	"log/slog"
 	"net/http"
 	"os"
-	"time"
 
 	"github.com/xartyomkax/website-analyzer/internal/analyzer"
+	"github.com/xartyomkax/website-analyzer/internal/config"
 	"github.com/xartyomkax/website-analyzer/internal/handler"
 )
 
@@ -16,15 +16,19 @@ func main() {
 	slog.SetDefault(slog.New(slog.NewJSONHandler(os.Stdout, nil)))
 
 	// Configuration
-	config := &analyzer.Config{
-		RequestTimeout:  30 * time.Second,
-		LinkTimeout:     5 * time.Second,
-		MaxWorkers:      10,
-		MaxResponseSize: 10 * 1024 * 1024, // 10MB
+	cfg := config.LoadConfig()
+
+	// Analyzer config
+	analyzerCfg := &analyzer.Config{
+		RequestTimeout:  cfg.RequestTimeout,
+		LinkTimeout:     cfg.LinkTimeout,
+		MaxWorkers:      cfg.MaxWorkers,
+		MaxResponseSize: cfg.MaxResponseSize,
+		MaxURLLength:    cfg.MaxURLLength,
 	}
 
 	// Create analyzer
-	analyzer := analyzer.NewAnalyzer(config)
+	analyzer := analyzer.NewAnalyzer(analyzerCfg)
 
 	// Create handler
 	h, err := handler.NewHandler(analyzer, "web/templates")
@@ -38,13 +42,8 @@ func main() {
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("web/static"))))
 
 	// Start server
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
-	}
-
-	addr := ":" + port
-	slog.Info("server starting", "addr", addr)
+	addr := ":" + cfg.Port
+	slog.Info("server starting", "addr", addr, "env", cfg.Env)
 
 	if err := http.ListenAndServe(addr, nil); err != nil {
 		log.Fatal(err)

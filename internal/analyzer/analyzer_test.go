@@ -36,6 +36,7 @@ func TestAnalyzer_Analyze(t *testing.T) {
 		LinkTimeout:     1 * time.Second,
 		MaxWorkers:      5,
 		MaxResponseSize: 1024 * 1024,
+		MaxURLLength:    2048,
 	}
 
 	a := NewAnalyzer(config)

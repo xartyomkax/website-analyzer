@@ -7,13 +7,13 @@ import (
 	"os"
 )
 
-func ValidateURL(rawURL string) error {
+func ValidateURL(rawURL string, maxURLLength int) error {
 	if rawURL == "" {
 		return fmt.Errorf("URL is required")
 	}
 
-	if len(rawURL) > 2048 {
-		return fmt.Errorf("URL too long (max 2048 characters)")
+	if len(rawURL) > maxURLLength {
+		return fmt.Errorf("URL too long (max %d characters)", maxURLLength)
 	}
 
 	parsed, err := url.Parse(rawURL)

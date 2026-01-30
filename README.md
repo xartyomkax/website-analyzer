@@ -33,7 +33,7 @@ A lightweight Go web application that analyzes web pages for HTML structure, hea
 
 ```bash
 # Clone the repository
-git clone <repository-url>
+git clone https://github.com/xartyomkax/website-analyzer
 cd webpage-analyzer
 
 # Install dependencies

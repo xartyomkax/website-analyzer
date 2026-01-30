@@ -17,6 +17,7 @@ type Config struct {
 	LinkTimeout     time.Duration
 	MaxWorkers      int
 	MaxResponseSize int64
+	MaxURLLength    int
 }
 
 type Analyzer struct {
@@ -35,7 +36,7 @@ func NewAnalyzer(config *Config) *Analyzer {
 
 func (a *Analyzer) Analyze(targetURL string) (*models.AnalysisResult, error) {
 	// Validate URL
-	if err := validator.ValidateURL(targetURL); err != nil {
+	if err := validator.ValidateURL(targetURL, a.config.MaxURLLength); err != nil {
 		return nil, fmt.Errorf("invalid URL: %w", err)
 	}
 
