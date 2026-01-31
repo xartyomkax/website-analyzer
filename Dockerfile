@@ -41,17 +41,13 @@ COPY --from=builder /build /app
 EXPOSE 8080 2345
 
 # Run with delve
-CMD ["dlv", "debug", "./cmd", "--headless", "--listen=:2345", "--api-version=2", "--accept-multiclient"]
+CMD ["dlv", "debug", "./cmd", "--headless", "--listen=:2345", "--api-version=2", "--accept-multiclient", "--continue"]
 
 # Stage 3: Production (minimal runtime)
 FROM alpine:latest AS production
 
 # Install CA certificates for HTTPS requests
 RUN apk --no-cache add ca-certificates
-
-# Create non-root user
-RUN addgroup -g 1000 appuser && \
-    adduser -D -u 1000 -G appuser appuser
 
 # Set working directory
 WORKDIR /app
@@ -61,12 +57,6 @@ COPY --from=builder /build/bin/webpage-analyzer .
 
 # Copy web assets
 COPY --from=builder /build/web ./web
-
-# Change ownership to non-root user
-RUN chown -R appuser:appuser /app
-
-# Switch to non-root user
-USER appuser
 
 # Expose application port
 EXPOSE 8080

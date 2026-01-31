@@ -69,10 +69,8 @@ run: build
 	@echo "Starting $(BINARY_NAME)..."
 	@$(BUILD_DIR)/$(BINARY_NAME)
 
-# Run with delve debugger
-debug:
-	@echo "Starting debugger on port 2345..."
-	dlv debug $(MAIN_PATH) --headless --listen=:2345 --api-version=2 --accept-multiclient
+# Run with delve debugger via Docker
+debug: docker-build-debug docker-run-debug
 
 # Build Docker image
 docker-build:
@@ -96,8 +94,14 @@ docker-run:
 
 # Run Docker debug container
 docker-run-debug:
-	@echo "Running Docker debug container..."
-	docker run -p $(APP_PORT):$(APP_PORT) -p $(DEBUG_PORT):$(DEBUG_PORT) --name $(DOCKER_IMAGE)-debug --rm $(DOCKER_IMAGE):debug
+	@echo "Running Docker debug container on port $(DEBUG_PORT)..."
+	docker run -it --rm \
+		--cap-add=SYS_PTRACE \
+		--security-opt="seccomp=unconfined" \
+		-p $(APP_PORT):$(APP_PORT) \
+		-p $(DEBUG_PORT):$(DEBUG_PORT) \
+		--name $(DOCKER_IMAGE)-debug \
+		$(DOCKER_IMAGE):debug
 
 # Stop and remove Docker container
 docker-clean:

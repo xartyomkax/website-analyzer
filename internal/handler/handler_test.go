@@ -74,7 +74,7 @@ func TestE2E_FullFlow(t *testing.T) {
 	t.Run("AnalyzeFlow", func(t *testing.T) {
 		form := url.Values{}
 		form.Add("url", ts.URL)
-		
+
 		req := httptest.NewRequest("POST", "/analyze", strings.NewReader(form.Encode()))
 		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 		rr := httptest.NewRecorder()
@@ -104,7 +104,7 @@ func TestE2E_FullFlow(t *testing.T) {
 	t.Run("InvalidURL", func(t *testing.T) {
 		form := url.Values{}
 		form.Add("url", "not-a-url")
-		
+
 		req := httptest.NewRequest("POST", "/analyze", strings.NewReader(form.Encode()))
 		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 		rr := httptest.NewRecorder()
