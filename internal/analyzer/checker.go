@@ -36,13 +36,9 @@ func CheckLinks(links []models.Link, config CheckLinksConfig) []models.LinkError
 
 	// Start worker pool
 	var wg sync.WaitGroup
-	workerCount := config.MaxWorkers
-	if workerCount <= 0 {
-		workerCount = 10
-	}
-	wg.Add(workerCount)
+	wg.Add(config.MaxWorkers)
 
-	for w := 0; w < workerCount; w++ {
+	for w := 0; w < config.MaxWorkers; w++ {
 		go worker(jobs, results, config, &wg)
 	}
 

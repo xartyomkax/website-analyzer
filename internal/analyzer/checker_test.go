@@ -3,6 +3,7 @@ package analyzer
 import (
 	"net/http"
 	"net/http/httptest"
+	"runtime"
 	"testing"
 	"time"
 
@@ -120,6 +121,34 @@ func TestCheckLinksEmpty(t *testing.T) {
 
 	if errors != nil {
 		t.Errorf("Expected nil for empty links, got %v", errors)
+	}
+}
+
+func TestCheckLinksGoroutineLeak(t *testing.T) {
+	// Sample links
+	links := []models.Link{
+		{URL: "http://example.com", Type: models.LinkTypeExternal},
+	}
+
+	config := CheckLinksConfig{
+		Timeout:    100 * time.Millisecond,
+		MaxWorkers: 5,
+	}
+
+	initialGoroutines := runtime.NumGoroutine()
+
+	// Run multiple times to see if leaks accumulate
+	for i := 0; i < 10; i++ {
+		_ = CheckLinks(links, config)
+	}
+
+	// Small buffer for any runtime-background goroutines that might have started
+	// but generally it should be stable. Let's wait a bit for any GC/cleanup.
+	time.Sleep(100 * time.Millisecond)
+
+	finalGoroutines := runtime.NumGoroutine()
+	if finalGoroutines > initialGoroutines+2 { // +2 for potential background noise, but should be stable
+		t.Errorf("Potential goroutine leak: started with %d, ended with %d", initialGoroutines, finalGoroutines)
 	}
 }
 
