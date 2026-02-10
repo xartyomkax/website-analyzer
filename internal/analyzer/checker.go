@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"net/url"
 	"sync"
 	"time"
 
@@ -15,6 +16,7 @@ type CheckLinksConfig struct {
 	Timeout      time.Duration
 	MaxWorkers   int
 	MaxRedirects int
+	Transport    http.RoundTripper // Optional custom transport for testing
 }
 
 // checkResult is used internally for worker communication
@@ -38,8 +40,11 @@ func CheckLinks(links []models.Link, config CheckLinksConfig) []models.LinkError
 	var wg sync.WaitGroup
 	wg.Add(config.MaxWorkers)
 
+	// Circuit breaker
+	cb := newCircuitBreaker(5)
+
 	for w := 0; w < config.MaxWorkers; w++ {
-		go worker(jobs, results, config, &wg)
+		go worker(jobs, results, config, cb, &wg)
 	}
 
 	// Send jobs
@@ -70,11 +75,12 @@ func CheckLinks(links []models.Link, config CheckLinksConfig) []models.LinkError
 }
 
 // worker processes link checking jobs
-func worker(jobs <-chan models.Link, results chan<- checkResult, config CheckLinksConfig, wg *sync.WaitGroup) {
+func worker(jobs <-chan models.Link, results chan<- checkResult, config CheckLinksConfig, cb *circuitBreaker, wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	client := &http.Client{
-		Timeout: config.Timeout,
+		Timeout:   config.Timeout,
+		Transport: config.Transport,
 		CheckRedirect: func(req *http.Request, via []*http.Request) error {
 			if len(via) >= config.MaxRedirects {
 				return fmt.Errorf("Too many redirects")
@@ -84,9 +90,56 @@ func worker(jobs <-chan models.Link, results chan<- checkResult, config CheckLin
 	}
 
 	for link := range jobs {
+		domain := getDomain(link.URL)
+
+		// Check circuit breaker
+		if domain != "" && !cb.allow(domain) {
+			continue
+		}
+
 		result := checkLink(client, link.URL)
+
+		// Update circuit breaker on failure
+		if result.err != nil && domain != "" {
+			cb.recordFailure(domain)
+		}
+
 		results <- result
 	}
+}
+
+// circuitBreaker manages failure counts per domain
+type circuitBreaker struct {
+	mu          sync.RWMutex
+	failures    map[string]int
+	maxFailures int
+}
+
+func newCircuitBreaker(maxFailures int) *circuitBreaker {
+	return &circuitBreaker{
+		failures:    make(map[string]int),
+		maxFailures: maxFailures,
+	}
+}
+
+func (cb *circuitBreaker) allow(domain string) bool {
+	cb.mu.RLock()
+	defer cb.mu.RUnlock()
+	return cb.failures[domain] < cb.maxFailures
+}
+
+func (cb *circuitBreaker) recordFailure(domain string) {
+	cb.mu.Lock()
+	defer cb.mu.Unlock()
+	cb.failures[domain]++
+}
+
+func getDomain(linkURL string) string {
+	u, err := url.Parse(linkURL)
+	if err != nil {
+		return ""
+	}
+	return u.Host
 }
 
 // checkLink performs a single link check
